@@ -9,7 +9,7 @@ const AdminLayout = ({children,}: Readonly<{
       <Header/>
       <div className="slex flex flex-col flex-1 md:flex-row bg-gray-100">
         <Sidebar />
-        <div className="flex-1 justify-center flex md:justify-start max-w-5xl mx-auto w-full">
+        <div className="flex-1 justify-center flex md:justify-start max-w-5xl mx-auto w-full min-h-screen">
           {children}
         </div>
       </div>

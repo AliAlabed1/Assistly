@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import  QueryClientProvider  from "./providers/query-provider";
+import { Toaster } from "sonner";
 
 
 export const metadata: Metadata = {
@@ -14,15 +16,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body
-          className="min-h-screen flex"
-        >
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <QueryClientProvider>
+      <ClerkProvider>
+        <html lang="en">
+          <body
+            className="min-h-screen flex"
+          >
+            {children}
+            <Toaster
+              position = 'bottom-center'
+            />
+          </body>
+        </html>
+      </ClerkProvider>
+    </QueryClientProvider>
     
   );
 }

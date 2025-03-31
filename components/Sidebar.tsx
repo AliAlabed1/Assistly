@@ -24,7 +24,7 @@ const Sidebar = () => {
   ]
   return (
     <div className='bg-white text-white p-5'>
-      <ul className='gap-5  flex lg:flex-col'>
+      <ul className='gap-5  flex md:flex-col'>
         {
             links.map((link,i)=>(
               <li className='flex-1' key={`${link}_${i}`}>
