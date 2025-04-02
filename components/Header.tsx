@@ -4,7 +4,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
 
 const Header = () => {
   return (
-    <header className='bg-white shadow-sm text-gray-800 flex justify-between p-5'>
+    <header className='bg-white shadow-sm text-gray-800 flex justify-between p-5 sticky z-50 top-0'>
         <Link href='/' className="flex text-4xl items-center font-thin">
             <Avatar
                 seed = 'PAPAFAM Support Agent'

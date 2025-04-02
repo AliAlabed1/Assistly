@@ -13,13 +13,13 @@ const Sidebar = () => {
       icon:<PencilLine className='h-6 w-6 md:h-8 md:w-8'/>,
       text1:"Edit",
       text2:"Chatbots",
-      href:''
+      href:'/view-chatbots'
     },
     {
       icon:<SearchIcon className='h-6 w-6 md:h-8 md:w-8'/>,
       text1:"View",
       text2:"Sessions",
-      href:''
+      href:'/review-sessions'
     },
   ]
   return (

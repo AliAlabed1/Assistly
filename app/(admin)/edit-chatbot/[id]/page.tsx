@@ -1,34 +1,104 @@
 'use client'
 import Avatar from '@/components/Avatar'
+import Characteristic from '@/components/Characteristic'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { fetchCharacteristics, fetchChatbotById } from '@/lib/api'
-import { Chatbot, ChatbotCharacteristic } from '@/types/database'
-import { useQuery } from '@tanstack/react-query'
+import {  createCharacteristic, delete_chat_bot, fetchChatbotById, updateChatbotName } from '@/lib/api'
+import { CharacteristicInput, Chatbot, ChatbotCharacteristic, UpdateChatbotNAmeInput } from '@/types/database'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Copy } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState,use } from 'react'
 import { toast } from 'sonner'
 
 const page = ({params}:{params:Promise<{ id: string }>}) => {
+  const queryClient = useQueryClient();
   const { id } = use(params);
   const [url,setUrl]= useState<string>('');
   const [chatbotName,setChatbotName] = useState<string>('')
   const [newCharacteristic,setNewCharactristic] = useState<string>('')
-  
+  const router = useRouter()
+  const mutation = useMutation<any,Error,{id:string}>({
+    mutationFn:delete_chat_bot,
+    onSuccess:(data)=>{
+      toast.success("Chatbot deleted!")
+    },
+    onError:(data)=>{
+      toast.error(data.message)
+    }
+  })
+
+  const addCharMutation = useMutation<ChatbotCharacteristic,Error,CharacteristicInput>({
+    mutationFn:createCharacteristic,
+    onSuccess(data, variables, context) {
+      toast.success("Characteristic added!"),
+      queryClient.invalidateQueries({
+        queryKey:['chatbot',id]
+      })
+    },
+    onError(data){
+      toast.error("Adding Characteristic failed")
+    }
+  });
+
+  const updateNameMutation = useMutation<any,Error,UpdateChatbotNAmeInput>({
+    mutationFn:updateChatbotName,
+    onSuccess:(data)=>{
+      toast.success("Updating Name is done!")
+    },
+    onError:(data)=>{
+      toast.error("Updating failed!")
+    }
+
+  })
   const {data:chatbot,isLoading:chatbotLoading,isError:chatbotError} = useQuery<Chatbot>({
     queryKey:['chatbot',id],
-    queryFn:()=>fetchChatbotById(id)
+    queryFn:()=>fetchChatbotById(id),
   })
   
   const handleChangeChatbotName = (e:React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
+    try {
+      updateNameMutation.mutate({
+        id:id,
+        newName:chatbotName
+      })
+    } catch (error) {
+      toast.error('Unexpected Error')
+    }
+  }
+  const handleAddChar = (e:React.FormEvent)=>{
+    e.preventDefault();
+    
+    try {
+      addCharMutation.mutate({
+        content:newCharacteristic,
+        chatbot_id:id
+      })
+    } catch (error) {
+      toast.error("Unexpected error")
+    }
+    setNewCharactristic('')
+  }
+
+  const handleDeleteChatbot = () =>{
+    try {
+      const isConfirmed = window.confirm(
+        "Are you sure you want to delete this chatbot?"
+      )
+      if(!isConfirmed) return;
+      mutation.mutate({id})
+      router.push('/view-chatbots')
+
+    } catch (error) {
+      toast.error('Unexpected Error')
+    }
   }
 
   useEffect(()=>{
     if(chatbot){
       setChatbotName(chatbot.name)
-      console.log(chatbot)
     }
   },[chatbot])
 
@@ -37,8 +107,8 @@ const page = ({params}:{params:Promise<{ id: string }>}) => {
     setUrl(url)
   },[id])
 
-  if(chatbotLoading ) return <Avatar seed='loading'/>
-  if(chatbotError || !chatbot ) return <p>Some thing goes wrong</p>
+  if(chatbotLoading ) return <div className='animate-spin self-center m-auto'><Avatar seed={'loading'}/></div>
+  if(chatbotError || !chatbot ) return <p>Some thing went wrong</p>
   
   return (
     <div className='px-0 md:p-10'>
@@ -66,7 +136,7 @@ const page = ({params}:{params:Promise<{ id: string }>}) => {
         <Button 
             variant={'destructive'} 
             className='absolute top-2 right-2 h-8 w-8' 
-            // onClick={()=>handleDelete(id)}
+            onClick={handleDeleteChatbot}
         >
             X
         </Button>
@@ -78,7 +148,11 @@ const page = ({params}:{params:Promise<{ id: string }>}) => {
                 onChange={(e)=>setChatbotName(e.target.value)}
                 className='w-full border-none bg-transparent text-xl font-bold'
               />
-              <Button  type = 'submit' disabled={!chatbotName}>Update</Button>
+              <Button  type = 'submit' disabled={chatbotName === chatbot.name}>
+                {
+                  updateNameMutation.isPending ? 'Updateing..':'Update'
+                }
+              </Button>
             </form>
             <ul>
 
@@ -98,14 +172,22 @@ const page = ({params}:{params:Promise<{ id: string }>}) => {
             />
             <Button 
               type='submit'
-              disabled = {!newCharacteristic}>
-                Add
-              </Button>
+              disabled = {!newCharacteristic}
+              onClick={handleAddChar}
+            >
+              {
+                addCharMutation.isPending?
+                'Adding..':'Add'
+              }
+            </Button>
           </form>
-          <ul>
+          <ul className='flex flex-wrap-reverse gap-3 mt-3'>
             {
               chatbot.characteristics?.map((characteristic:ChatbotCharacteristic)=>(
-                <p key={characteristic.id}>{characteristic.content}</p>
+                <Characteristic
+                  key = {characteristic.id}
+                  characteristic={characteristic}
+                />
               ))
             }
           </ul>

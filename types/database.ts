@@ -5,12 +5,13 @@ export interface Chatbot {
   clerk_user_id: string;
   name: string;
   created_at: string; // ISO timestamp
-  characteristics:[ChatbotCharacteristic]
+  characteristics:[ChatbotCharacteristic],
+  chat_sessions:[ChatSession]
 }
 
 export interface ChatbotCharacteristic {
-  id: number;
-  chatbot_id: number;
+  id: string;
+  chatbot_id: string;
   content: string;
   created_at: string;
 }
@@ -42,3 +43,13 @@ export interface CreateChatbotInput{
   name:string;
 }
   
+export interface CharacteristicInput{
+  chatbot_id:string
+  content:string
+}
+
+
+export interface UpdateChatbotNAmeInput{
+  id:string,
+  newName:string
+}
