@@ -1,4 +1,4 @@
-import { CharacteristicInput, Chatbot,ChatbotCharacteristic,CreateChatbotInput, UpdateChatbotNAmeInput } from "@/types/database";
+import { CharacteristicInput, Chatbot,ChatbotCharacteristic,ChatSession,CreateChatbotInput, UpdateChatbotNAmeInput } from "@/types/database";
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 export const createChatbot = async(input:CreateChatbotInput):Promise<Chatbot> =>{
@@ -76,5 +76,11 @@ export const updateChatbotName = async(input:UpdateChatbotNAmeInput):Promise<any
     if(!res.ok){
         throw new Error('Change chatbot name failed')
     }
+    return res.json()
+}
+
+export const getSessionById = async(sessionId:number):Promise<ChatSession>=>{
+    const res = await fetch(`${API_BASE}/sessions/${sessionId}/`)
+    if(!res.ok) throw new Error('Failed to fetch session')
     return res.json()
 }

@@ -18,8 +18,8 @@ export interface ChatbotCharacteristic {
 
 export interface Guest {
   id: number;
-  name: string | null;
-  email: string | null;
+  name: string ;
+  email: string ;
   created_at: string;
 }
 
@@ -28,6 +28,9 @@ export interface ChatSession {
   chatbot_id: number;
   guest_id: number | null;
   created_at: string;
+  guest:Guest,
+  messages:Message[],
+  chatbot_name:string
 }
 
 export interface Message {

@@ -3,6 +3,7 @@
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
+@plugin "daisyui";
 
 :root {
   --radius: 0.625rem;
