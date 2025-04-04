@@ -56,3 +56,9 @@ export interface UpdateChatbotNAmeInput{
   id:string,
   newName:string
 }
+
+export interface StartChat{
+  userName:string,
+  userEmail:string,
+  chatbotId:number
+}
