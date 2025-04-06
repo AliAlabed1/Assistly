@@ -62,3 +62,18 @@ export interface StartChat{
   userEmail:string,
   chatbotId:number
 }
+
+export interface AddGuestInput{
+  name:string,
+  email:string
+}
+
+export interface AddSessionInput{
+  chatbot_id:number,
+  guest_id:number
+}
+export interface AddMessageInput{
+  content:string,
+  sender:"ai" | "user",
+  chat_session_id:number
+}

@@ -1,4 +1,4 @@
-import { CharacteristicInput, Chatbot,ChatbotCharacteristic,ChatSession,CreateChatbotInput, UpdateChatbotNAmeInput } from "@/types/database";
+import { AddGuestInput, AddMessageInput, AddSessionInput, CharacteristicInput, Chatbot,ChatbotCharacteristic,ChatSession,CreateChatbotInput, Guest, Message, UpdateChatbotNAmeInput } from "@/types/database";
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 export const createChatbot = async(input:CreateChatbotInput):Promise<Chatbot> =>{
@@ -82,5 +82,45 @@ export const updateChatbotName = async(input:UpdateChatbotNAmeInput):Promise<any
 export const getSessionById = async(sessionId:number):Promise<ChatSession>=>{
     const res = await fetch(`${API_BASE}/sessions/${sessionId}/`)
     if(!res.ok) throw new Error('Failed to fetch session')
+    return res.json()
+}
+
+export const addGuest = async (input:AddGuestInput):Promise<Guest>=>{
+    console.log('add function')
+    const res = await fetch(`${API_BASE}/add_guest/`,{
+        method:"POST",
+        headers:{
+            "content-type":"application/json"
+        },
+        body:JSON.stringify(input)
+    })
+    if(!res.ok)
+        throw new Error('Add new guest failed!')
+    return res.json()
+}
+
+export const addSession = async (input:AddSessionInput):Promise<ChatSession>=>{
+    const res = await fetch(`${API_BASE}/add_session/`,{
+        method:"POST",
+        headers:{
+            'content-type':'application/json',
+        },
+        body:JSON.stringify(input)
+    })
+    if(!res.ok)
+        throw new Error('Create Setion Failed!')
+    return res.json()
+}
+
+export const addNewMessage = async(input:AddMessageInput):Promise<Message>=>{
+    const res = await fetch(`${API_BASE}/add_message/`,{
+        method:"POST",
+        headers:{
+            "content-type":"application/json"
+        },
+        body:JSON.stringify(input)
+    })
+    if(!res.ok)
+        throw new Error("Adding Message Failed")
     return res.json()
 }

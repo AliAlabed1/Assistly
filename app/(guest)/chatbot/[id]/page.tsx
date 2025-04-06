@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
+import { startNewChatSession } from "@/lib/utils";
 const page = ({params}:{params:Promise<{id:string}>}) => {
     const [name,setName] = useState<string>('');
     const [email,setEmail] = useState<string>('');
@@ -22,9 +23,13 @@ const page = ({params}:{params:Promise<{id:string}>}) => {
     const [loading,setLoading] = useState<boolean>(false)
     const [messages,setMessages] = useState<Message[]>([])
     const {id} = use(params)
-    const handleSubmition = (e:React.FormEvent)=>{
+    const handleSubmition = async (e:React.FormEvent)=>{
         e.preventDefault();
         setLoading(true);
+        const data = await startNewChatSession({userName:name,userEmail:email,chatbotId:parseInt(id)})
+        setSessionId(data.sessionId)
+        setLoading(false)
+        setIsOpen(false)
     }
     return (
         <div className="w-full flex bg-gray-100">
