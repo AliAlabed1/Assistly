@@ -1,6 +1,6 @@
-import { Chatbot, ChatSession } from "@/types/database";
+import { Chatbot, ChatSession, Message } from "@/types/database";
 import { useQuery } from "@tanstack/react-query";
-import { fetchChatbotById, get_user_chatbots, getSessionById } from "./api";
+import { fetchChatbotById, get_user_chatbots, getMessages, getSessionById } from "./api";
 
 export const useChatbotQuery = (id:string)=>{
     return useQuery<Chatbot>({
@@ -20,5 +20,12 @@ export const useGetSessionQuery = (sessionId:number)=>{
     return useQuery<ChatSession>({
         queryKey:['ChatSession',sessionId],
         queryFn:()=>getSessionById(sessionId)
+    })
+}
+
+export const useGetMessagesQery = (sessionId:number)=>{
+    return useQuery<Message[]>({
+        queryKey:['Messages',sessionId],
+        queryFn:()=>getMessages(sessionId)
     })
 }

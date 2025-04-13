@@ -77,3 +77,9 @@ export interface AddMessageInput{
   sender:"ai" | "user",
   chat_session_id:number
 }
+
+export interface SendMessageInput{
+  content:string,
+  sender:"ai"|"user",
+  chat_session_id:number
+}

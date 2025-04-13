@@ -16,12 +16,13 @@ export const startNewChatSession = async(input:StartChat) =>{
       name:input.userName,
       email:input.userEmail
     });
+    console.log('guestData:',guestData)
 
     const sessionData = await addSession({
       chatbot_id:input.chatbotId,
       guest_id:guestData.id
     });
-
+    console.log('sessionData:',sessionData)
     const message = await addNewMessage({
       content:`Hi ${guestData.name} how can I help you today!`,
       chat_session_id:sessionData.id,

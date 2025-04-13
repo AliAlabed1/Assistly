@@ -11,7 +11,7 @@ const page = () => {
   const {user} = useUser()
   if(!user) return <div className='self-center'>Something went wrong</div>
   const {data,isLoading,error} = useUSerChatbotsQuery(user.id)
-  if(isLoading) return <div className='self-center animate-spin'><Avatar seed={'Loading...'}/></div>
+  if(isLoading) return <div className='m-auto animate-spin'><Avatar seed={'Loading...'}/></div>
   if(error) return <div className='self-center'>Something went wrong</div>
   const sortedChatbots:Chatbot[]|undefined = data?.map((chatbot:Chatbot)=>({
     ...chatbot,

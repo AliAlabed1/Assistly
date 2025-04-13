@@ -14,6 +14,7 @@ const Messages = ({messages,chatSessionId,chatbotName,guestName}:{messages:Messa
         ref.current.scrollIntoView({behavior:"smooth"})
     }
   },[messages])
+  console.log(messages)
   return (
     <div className='flex-1 flex flex-col overflow-y-auto space-y-10 py-10 px-5 bg-white rounded-lg'>
       {

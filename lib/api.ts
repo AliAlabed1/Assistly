@@ -124,3 +124,10 @@ export const addNewMessage = async(input:AddMessageInput):Promise<Message>=>{
         throw new Error("Adding Message Failed")
     return res.json()
 }
+
+export const getMessages = async (sessionId:number):Promise<Message[]>=>{
+    const res = await fetch(`${API_BASE}/session_messages/${sessionId}/`)
+    if(!res.ok)
+        throw new Error('failed to fetch messages!')
+    return res.json()
+}

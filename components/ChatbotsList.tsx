@@ -13,13 +13,16 @@ const ChatbotsList = ({userId}:{userId:string}) => {
         queryKey:['UserChatbots',userId],
         queryFn:()=>get_user_chatbots({user_id:userId})
     })
-    if(isLoading) return <div className='animate-pulse self-center'><Avatar seed={'loading'}/></div>
+    if(isLoading) return <div className='animate-spin self-center m-auto'><Avatar seed={'loading...'}/></div>
     if(!chatbots) return <div>Something went wrong! </div>
     const sortedChatbots:Chatbot[] = [...chatbots].sort(
         (a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
     return (
-        <>
+        <div className='flex-1'>
+            <h1 className="text-xl md:text-3xl font-semibold mb-5">
+                Active Chatbots
+            </h1>                                                       
             {
                 sortedChatbots.length === 0 ? 
                 <div>
@@ -43,7 +46,7 @@ const ChatbotsList = ({userId}:{userId:string}) => {
                     }
                 </ul>
             }
-        </>
+        </div>
     )
 }
 
