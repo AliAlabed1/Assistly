@@ -2,7 +2,7 @@ import Avatar from '@/components/Avatar'
 import { SignIn } from '@clerk/nextjs'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <div className= ' flex py-10 md:py-0 flex-col flex-1 justify-center items-center bg-[#6485F5]'>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
@@ -22,4 +22,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

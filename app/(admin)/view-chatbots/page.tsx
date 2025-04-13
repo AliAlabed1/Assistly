@@ -2,7 +2,7 @@ import Avatar from "@/components/Avatar"
 import ChatbotsList from "@/components/ChatbotsList"
 import { auth } from "@clerk/nextjs/server"
 
-const page = async() => {
+const Page = async() => {
   const {userId} = await auth()
   if(!userId) return null
 
@@ -11,4 +11,4 @@ const page = async() => {
 
 }
 
-export default page
+export default Page

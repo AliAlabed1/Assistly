@@ -6,7 +6,7 @@ import { useGetSessionQuery } from '@/lib/queries';
 import { Message } from '@/types/database';
 import React, { use } from 'react'
 
-const page = ({params}:{params:Promise<{ id: number }>}) => {
+const Page = ({params}:{params:Promise<{ id: number }>}) => {
   const { id } = use(params);
   const {data,isLoading,error} = useGetSessionQuery(id)
   if(isLoading) return <div className='self-center animate-spin'><Avatar seed='Loading...'/></div>
@@ -33,4 +33,4 @@ const page = ({params}:{params:Promise<{ id: number }>}) => {
   )
 }
 
-export default page
+export default Page

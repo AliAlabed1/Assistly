@@ -7,11 +7,11 @@ import { RedirectToSignIn, useUser } from '@clerk/nextjs'
 import { auth } from '@clerk/nextjs/server'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   const {user} = useUser()
   if(!user) return <div className='self-center'>Something went wrong</div>
   const {data,isLoading,error} = useUSerChatbotsQuery(user.id)
-  if(isLoading) return <div className='m-auto animate-spin'><Avatar seed={'Loading...'}/></div>
+  if(isLoading) return <div className='self-center animate-spin'><Avatar seed={'Loading...'}/></div>
   if(error) return <div className='self-center'>Something went wrong</div>
   const sortedChatbots:Chatbot[]|undefined = data?.map((chatbot:Chatbot)=>({
     ...chatbot,
@@ -28,4 +28,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

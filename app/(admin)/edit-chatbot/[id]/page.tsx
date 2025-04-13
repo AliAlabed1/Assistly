@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState,use } from 'react'
 import { toast } from 'sonner'
 
-const page = ({params}:{params:Promise<{ id: string }>}) => {
+const Page = ({params}:{params:Promise<{ id: string }>}) => {
   const queryClient = useQueryClient();
   const { id } = use(params);
   const [url,setUrl]= useState<string>('');
@@ -198,4 +198,4 @@ const page = ({params}:{params:Promise<{ id: string }>}) => {
   )
 }
 
-export default page
+export default Page

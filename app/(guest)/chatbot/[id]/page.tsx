@@ -26,7 +26,7 @@ import { toast } from "sonner";
 const formScheme = z.object({
     message:z.string().min(2,'Your Message is too short')
 })
-const page = ({params}:{params:Promise<{id:string}>}) => {
+const Page = ({params}:{params:Promise<{id:string}>}) => {
     const [name,setName] = useState<string>('');
     const [email,setEmail] = useState<string>('');
     const [isOpen,setIsOpen] = useState<boolean>(true)
@@ -219,4 +219,4 @@ const page = ({params}:{params:Promise<{id:string}>}) => {
     )
 }
 
-export default page
+export default Page
