@@ -67,7 +67,7 @@ export async function POST(req:NextRequest){
         //     model:'deepseek/deepseek-r1:free'
         // })
         const data = await openaiResponse.json()
-        console.log('the response is:',data.choices)
+        console.log('the response is:',data?.choices)
         const aiResponse = data?.choices?.[0]?.message?.content?.trim();
         
         if(!aiResponse){
