@@ -2,7 +2,7 @@ import { addNewMessage, fetchChatbotById, getMessages } from "@/lib/api";
 
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from 'openai'
-import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import { ChatCompletion, ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 const openai = new OpenAI({
     apiKey:process.env.OPENAI_API_KEY,
@@ -10,20 +10,22 @@ const openai = new OpenAI({
 })
 export async function POST(req:NextRequest){
     const {chat_session_id,chatbot_id,content,name} = await req.json();
-    
+    console.log('starting chat')
     try {
+        console.log('fetching chatbot by id')
         const chatbot = await fetchChatbotById(chatbot_id)
         if(!chatbot){
             return NextResponse.json({error:"Chatbot not found"});
         }
-
+        console.log('fetching done')
+        console.log('fetching messages')
         const previousMessages = await getMessages(chat_session_id)
         if(!previousMessages)
             return NextResponse.json(
                 {error:"failed to load previous messages"},
                 {status:500}
             )
-        
+        console.log('fetching done')
         const formattedMessages:ChatCompletionMessageParam[] = previousMessages.map((message)=>({
             role: message.sender === "ai" ? "system" : "user",
             name: message.sender ==="ai"? "system":name,
@@ -48,13 +50,25 @@ export async function POST(req:NextRequest){
                 content:content
             }
         ]
-
-        const openaiResponse = await openai.chat.completions.create({
-            messages:messages,
-            model:'deepseek/deepseek-r1:free'
+        console.log('dending to dep seek')
+        const openaiResponse  = await fetch('https://openrouter.ai/api/v1/chat/completions',{
+            method:"POST",
+            headers:{
+                'content-type':'application/json',
+                'Authorization':'Bearer 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'
+            },
+            body:JSON.stringify({
+                model: "deepseek/deepseek-r1:free",
+                messages:messages
+            })
         })
-
-        const aiResponse = openaiResponse?.choices?.[0]?.message?.content?.trim();
+        // const openaiResponse = await openai.chat.completions.create({
+        //     messages:messages,
+        //     model:'deepseek/deepseek-r1:free'
+        // })
+        const data = await openaiResponse.json()
+        console.log('the response is:',data.choices)
+        const aiResponse = data?.choices?.[0]?.message?.content?.trim();
         
         if(!aiResponse){
             return NextResponse.json(
@@ -79,6 +93,7 @@ export async function POST(req:NextRequest){
             id:aiMessageResult.id,
             content:aiResponse
         })
+        
 
 
     } catch (error) {
