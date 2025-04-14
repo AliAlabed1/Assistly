@@ -55,7 +55,7 @@ export async function POST(req:NextRequest){
             method:"POST",
             headers:{
                 'content-type':'application/json',
-                'Authorization':'Bearer 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'
+                'Authorization':`Bearer ${process.env.OPENAI_API_KEY}`
             },
             body:JSON.stringify({
                 model: "deepseek/deepseek-r1:free",
