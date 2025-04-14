@@ -105,6 +105,7 @@ const Page = ({params}:{params:Promise<{id:string}>}) => {
                     content:message
                 })
             })
+            console.log('recieved response is:',response)
 
             const result = await response.json()
             console.log('result',result)

@@ -1,13 +1,8 @@
 import { addNewMessage, fetchChatbotById, getMessages } from "@/lib/api";
 
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from 'openai'
-import { ChatCompletion, ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import {  ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
-const openai = new OpenAI({
-    apiKey:process.env.OPENAI_API_KEY,
-    baseURL: "https://openrouter.ai/api/v1"
-})
 export async function POST(req:NextRequest){
     const {chat_session_id,chatbot_id,content,name} = await req.json();
     console.log('starting chat')
@@ -77,19 +72,21 @@ export async function POST(req:NextRequest){
                 {status:500}
             )
         }
-
+        console.log('add new message to database')
         await addNewMessage({
             content:content,
             sender:"user",
             chat_session_id:chat_session_id
         })
-
+        console.log('done')
+        console.log('adding ai message to database')
         const aiMessageResult = await addNewMessage({
             content:aiResponse,
             sender:'ai',
             chat_session_id:chat_session_id
         })
-
+        console.log('done')
+        
         return NextResponse.json({
             id:aiMessageResult.id,
             content:aiResponse
