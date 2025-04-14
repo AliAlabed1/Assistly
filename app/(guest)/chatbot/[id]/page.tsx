@@ -106,13 +106,27 @@ const Page = ({params}:{params:Promise<{id:string}>}) => {
                 })
             })
             console.log('recieved response is:',response)
-
             const result = await response.json()
             console.log('result',result)
+            console.log('add new message to database')
+            await addNewMessage({
+                content:message,
+                sender:"user",
+                chat_session_id:sessionId
+            })
+            console.log('done')
+            console.log('adding ai message to database')
+            const aiMessageResult = await addNewMessage({
+                content:result.content,
+                sender:'ai',
+                chat_session_id:sessionId
+            })
+            console.log('done')
+            
             setMessages((prevMessages)=>
                 prevMessages.map((msg)=>
                     msg.id === loadingMessage.id ?
-                    {...msg,content:result.content,id:result.id}:
+                    {...msg,content:aiMessageResult.content,id:aiMessageResult.id}:
                     msg
                 )
             )

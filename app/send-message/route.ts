@@ -76,23 +76,10 @@ export async function POST(req:NextRequest){
                 {status:500}
             )
         }
-        console.log('add new message to database')
-        await addNewMessage({
-            content:content,
-            sender:"user",
-            chat_session_id:chat_session_id
-        })
-        console.log('done')
-        console.log('adding ai message to database')
-        const aiMessageResult = await addNewMessage({
-            content:aiResponse,
-            sender:'ai',
-            chat_session_id:chat_session_id
-        })
-        console.log('done')
+        
 
         return NextResponse.json({
-            id:aiMessageResult.id,
+            
             content:aiResponse
         })
         
