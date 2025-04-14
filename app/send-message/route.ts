@@ -2,7 +2,10 @@ import { addNewMessage, fetchChatbotById, getMessages } from "@/lib/api";
 
 import { NextRequest, NextResponse } from "next/server";
 import {  ChatCompletionMessageParam } from "openai/resources/index.mjs";
-
+const controller = new AbortController();
+const timeout = setTimeout(() => {
+  controller.abort();
+}, 120000);
 export async function POST(req:NextRequest){
     const {chat_session_id,chatbot_id,content,name} = await req.json();
     console.log('starting chat')
@@ -55,7 +58,8 @@ export async function POST(req:NextRequest){
             body:JSON.stringify({
                 model: "deepseek/deepseek-r1:free",
                 messages:messages
-            })
+            }),
+            signal: controller.signal
         })
         // const openaiResponse = await openai.chat.completions.create({
         //     messages:messages,
@@ -86,7 +90,7 @@ export async function POST(req:NextRequest){
             chat_session_id:chat_session_id
         })
         console.log('done')
-        
+
         return NextResponse.json({
             id:aiMessageResult.id,
             content:aiResponse
