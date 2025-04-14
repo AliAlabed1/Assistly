@@ -56,7 +56,7 @@ export async function POST(req:NextRequest){
                 'Authorization':`Bearer ${process.env.OPENAI_API_KEY}`
             },
             body:JSON.stringify({
-                model: "deepseek/deepseek-r1:free",
+                model: "mistralai/mistral-7b-instruct:free",
                 messages:messages
             }),
             signal: controller.signal
