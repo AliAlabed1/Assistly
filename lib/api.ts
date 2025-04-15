@@ -86,7 +86,7 @@ export const getSessionById = async(sessionId:number):Promise<ChatSession>=>{
 }
 
 export const addGuest = async (input:AddGuestInput):Promise<Guest>=>{
-    console.log('add function')
+    
     const res = await fetch(`${API_BASE}/add_guest/`,{
         method:"POST",
         headers:{

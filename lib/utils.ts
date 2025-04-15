@@ -18,13 +18,13 @@ export const startNewChatSession = async(input:StartChat) =>{
       name:input.userName,
       email:input.userEmail
     });
-    console.log('guestData:',guestData)
+    
 
     const sessionData = await addSession({
       chatbot_id:input.chatbotId,
       guest_id:guestData.id
     });
-    console.log('sessionData:',sessionData)
+    
     const message = await addNewMessage({
       content:`Hi ${guestData.name} how can I help you today!`,
       chat_session_id:sessionData.id,
@@ -42,22 +42,22 @@ export const startNewChatSession = async(input:StartChat) =>{
 
 export const sendMessage = async(input:sendMessageInput):Promise<NextResponse>=>{
   const {chat_session_id,chatbot_id,content,name} = input;
-  console.log('starting chat')
+  
   try {
-    console.log('fetching chatbot by id')
+    
     const chatbot = await fetchChatbotById(chatbot_id)
     if(!chatbot){
       return NextResponse.json({error:"Chatbot not found"});
     }
-    console.log('fetching done')
-    console.log('fetching messages')
+    
+    
     const previousMessages = await getMessages(chat_session_id)
     if(!previousMessages)
         return NextResponse.json(
             {error:"failed to load previous messages"},
             {status:500}
         )
-    console.log('fetching done')
+    
     const formattedMessages:ChatCompletionMessageParam[] = previousMessages.map((message)=>({
         role: message.sender === "ai" ? "system" : "user",
         name: message.sender ==="ai"? "system":name,
@@ -82,7 +82,7 @@ export const sendMessage = async(input:sendMessageInput):Promise<NextResponse>=>
             content:content
         }
     ]
-    console.log('dending to dep seek')
+    
     const openaiResponse  = await fetch('https://openrouter.ai/api/v1/chat/completions',{
         method:"POST",
         headers:{
@@ -95,13 +95,9 @@ export const sendMessage = async(input:sendMessageInput):Promise<NextResponse>=>
         }),
         
     })
-    // const openaiResponse = await openai.chat.completions.create({
-    //     messages:messages,
-    //     model:'deepseek/deepseek-r1:free'
-    // })
-    console.log(openaiResponse)
+    
     const data = await openaiResponse.json()
-    console.log('the response is:',data?.choices)
+    
     const aiResponse = data?.choices?.[0]?.message?.content?.trim();
     
     if(!aiResponse){
@@ -119,7 +115,7 @@ export const sendMessage = async(input:sendMessageInput):Promise<NextResponse>=>
 
 
   } catch (error) {
-    console.log("Error sending Message:",error)
+    
     return NextResponse.json({error},{status:500})
   }
 }

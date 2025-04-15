@@ -35,12 +35,7 @@ const Page = ({params}:{params:Promise<{id:string}>}) => {
     const [messages,setMessages] = useState<Message[]>([])
     const {id} = use(params)
     const {data:chatbotData} =  useChatbotQuery(id)
-    const sendMessageMutation = useMutation<Message,Error,SendMessageInput>({
-        mutationFn:addNewMessage,
-        onSuccess:()=>console.log('sended Message'),
-        onError:()=>console.log('failed to send message')
-        
-    })
+    
     const handleSubmition = async (e:React.FormEvent)=>{
         e.preventDefault();
         setLoading(true);
@@ -99,23 +94,21 @@ const Page = ({params}:{params:Promise<{id:string}>}) => {
                 name:name,
                 content:message
             })
-            console.log('recieved response is:',response)
+            
             const result = await response.json()
-            console.log('result',result)
-            console.log('add new message to database')
+            
             await addNewMessage({
                 content:message,
                 sender:"user",
                 chat_session_id:sessionId
             })
-            console.log('done')
-            console.log('adding ai message to database')
+            
             const aiMessageResult = await addNewMessage({
                 content:result.content,
                 sender:'ai',
                 chat_session_id:sessionId
             })
-            console.log('done')
+            
             
             setMessages((prevMessages)=>
                 prevMessages.map((msg)=>
