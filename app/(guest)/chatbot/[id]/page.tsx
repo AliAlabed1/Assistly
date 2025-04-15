@@ -12,7 +12,7 @@ import { Message, SendMessageInput } from "@/types/database";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { startNewChatSession } from "@/lib/utils";
+import { sendMessage, startNewChatSession } from "@/lib/utils";
 import Avatar from "@/components/Avatar";
 import { useChatbotQuery, useGetMessagesQery } from "@/lib/queries";
 import Messages from "@/components/Messages";
@@ -93,17 +93,11 @@ const Page = ({params}:{params:Promise<{id:string}>}) => {
 
         setMessages([...messages,userMessages,loadingMessage])
         try {
-            const response = await fetch('/send-message',{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                },
-                body:JSON.stringify({
-                    name:name,
-                    chat_session_id:sessionId,
-                    chatbot_id:id,
-                    content:message
-                })
+            const response = await sendMessage({
+                chat_session_id:sessionId,
+                chatbot_id:id,
+                name:name,
+                content:message
             })
             console.log('recieved response is:',response)
             const result = await response.json()

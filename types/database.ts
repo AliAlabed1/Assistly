@@ -83,3 +83,9 @@ export interface SendMessageInput{
   sender:"ai"|"user",
   chat_session_id:number
 }
+export interface sendMessageInput{
+  chat_session_id:number,
+  chatbot_id:string,
+  content:string,
+  name:string
+}
