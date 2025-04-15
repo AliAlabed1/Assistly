@@ -90,7 +90,7 @@ export const sendMessage = async(input:sendMessageInput):Promise<NextResponse>=>
             'Authorization':`Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`
         },
         body:JSON.stringify({
-            model: "mistralai/mistral-7b-instruct:free",
+            model: "deepseek/deepseek-r1:free",
             messages:messages
         }),
         
