@@ -87,7 +87,7 @@ export const sendMessage = async(input:sendMessageInput):Promise<NextResponse>=>
         method:"POST",
         headers:{
             'content-type':'application/json',
-            'Authorization':`Bearer ${process.env.OPENAI_API_KEY}`
+            'Authorization':`Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`
         },
         body:JSON.stringify({
             model: "mistralai/mistral-7b-instruct:free",
