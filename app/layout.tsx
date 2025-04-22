@@ -3,11 +3,14 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import  QueryClientProvider  from "./providers/query-provider";
 import { Toaster } from "sonner";
-
+import icon from './icon.svg'
 
 export const metadata: Metadata = {
   title: "Assistly",
   description: "Make Use Of AI",
+  icons:{
+    icon:'/icon.svg'
+  }
 };
 
 export default function RootLayout({
